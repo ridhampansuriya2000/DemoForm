@@ -1,0 +1,192 @@
+{
+  "org": "U.S Omni Tech",
+  "pillar": "Supply Chain Tech",
+  "product": "catalog",
+  "productID": 1945,
+  "enviroment": "",
+  "oneops": {
+    "appName": "Image Classification Streams",
+    "assembly": "test",
+    "environment": "",
+    "platform": "",
+    "concord": "URL",
+    "looper": "URL"
+  },
+  "wcnp": {
+    "appName": "wcnp-deployment-name",
+    "namespace": "",
+    "clusters": "",
+    "kitt": ""
+  },
+  "serviceRegistry": "",
+  "description": "",
+  "tier": "Tier1",
+  "apmID": "APM0010516",
+  "adgroup": "",
+  "servicenow": "",
+  "xMatter": "GEC-MTech-AssetsService",
+  "dl": "DL",
+  "jira": "",
+  "poc": "",
+  "owner": "",
+  "l3": "NA",
+  "l4": "NA",
+  "l5": "NA",
+  "gitRepo": "",
+  "checkmarx": "URL",
+  "sonarqube": "URL",
+  "hyegiea": "URL",
+  "splunkURL": "",
+  "dynatrace": "",
+  "prometheus": "",
+  "istioGrafana": "",
+  "podGrafana": "",
+  "appGrafana": "",
+  "mms-alert-config": "",
+  "ccm": [
+    {
+      "url": "",
+      "path": "image-classification"
+    },
+    {
+      "url": "",
+      "path": "image-classification"
+    }
+  ],
+  "secrets": [
+    {
+      "vault": [
+        {
+          "url": "URL",
+          "path": "example_application/dev#db_username"
+        },
+        {
+          "url": "URL",
+          "path": "example_application/dev#db_pass"
+        }
+      ]
+    }
+  ],
+  "platforms": [
+    {
+      "cassandra": [
+        {
+          "cluster": "image-classification-prod",
+
+          "version": "",
+          "Datacenter": [
+            "cdc",
+            "ndc",
+            "southcentral"
+          ],
+          "teamcontact": "",
+          "mmslink": "",
+          "mmsclusterview": ""
+        }
+      ]
+    },
+    {
+      "mongo": [
+        {
+          "dbname": "DATABASE-NAME",
+          "version": "",
+          "Datacenter": [
+            "cdc",
+            "ndc",
+            "southcentral"
+          ],
+          "teamcontact": "",
+          "mmslink": ""
+        }
+      ]
+    },
+    {
+      "cosmosdb": [
+        {
+          "dbname": "DATABASE-NAME",
+          "apiversion": "mongo",
+
+          "version": "",
+          "Datacenter": [
+            "cdc",
+            "ndc",
+            "southcentral"
+          ],
+          "teamcontact": "",
+          "mmslink": ""
+        }
+      ]
+    },
+    {
+      "yugabyte": [
+        {
+          "dbname": "DATABASE-NAME",
+          "version": "",
+          "Datacenter": [
+            "cdc",
+            "ndc",
+            "southcentral"
+          ],
+          "teamcontact": "",
+          "mmslink": "",
+          "yugaware": ""
+        }
+      ]
+    },
+    {
+      "postgresql": [
+        {
+          "dbname": "DATABASE-NAME",
+          "version": "",
+          "Datacenter": [
+            "cdc",
+            "ndc",
+            "southcentral"
+          ],
+          "teamcontact": "",
+          "mmslink": ""
+        }
+      ]
+    },
+    {
+      "azuresql": [
+        {
+          "dbname": "DATABASE-NAME",
+          "version": "",
+          "Datacenter": [
+            "cdc",
+            "ndc",
+            "southcentral"
+          ],
+          "teamcontact": "",
+          "mmslink": ""
+        }
+      ]
+    },
+    {
+      "oracle": [
+        {
+          "dbname": "DATABASE-NAME",
+          "version": "",
+          "Datacenter": [
+            "cdc",
+            "ndc",
+            "southcentral"
+          ],
+          "teamcontact": "",
+          "mmslink": ""
+        }
+      ]
+    },
+    {
+      "meghacache": [
+        {
+          "clustername": "",
+          "dxconsoleurl": "",
+          "topicname": [],
+          "lense": ""
+        }
+      ]
+    }
+  ]
+}
