@@ -23,7 +23,7 @@ const Form = ({
         values: {
             formRadio : 'oneops',
             databseCheckBox : [],
-            checkBox : [],
+            databse2CheckBox : [],
         },
         errors: {},
         touched: {},
@@ -37,7 +37,7 @@ const Form = ({
                 values : {...data,
                     formRadio : 'oneops',
                     databseCheckBox : [],
-                    checkBox : []}
+                    databse2CheckBox : []}
             }))
         })()
     },[])
@@ -66,6 +66,15 @@ const Form = ({
             } : {...preState.touched}
         }))
     };
+
+    const checkboxHandler = (e,e2,key, index) =>{
+        const {name, value, checked} = e.target;
+        setFormData((preState)=>({
+            ...preState,
+           values : {...preState.values,  [key] :  checked ? preState.values[key].concat(value) : preState.values[key].filter((item)=> item !== value)}
+        }))
+    };
+
     const errorHander = (name, value) => {
         if (!value) {
             return `${name} is required`
@@ -73,6 +82,35 @@ const Form = ({
             return false;
         }
     }
+
+    const getMultiValue = React.useCallback((key1,key2,key3) =>{
+        let value = []
+        if(formData?.values[key3] ){
+            if(key2 === 'Datacenter'&& formData?.values[key1]?.length){
+                value = ["cdc", "ndc", "southcentral"];
+                return value;
+            }
+            formData?.values[key3]?.forEach((item)=>{
+                if(formData?.values[key1].some( (elm) => elm === Object.keys(item)[0])){
+                    value = value.concat(item[Object.keys(item)[0]][0][key2])
+                }
+            })
+            return value.filter(item => item ? true : false).toString();
+        }
+    },[formData, formData.values,formData?.values?.databseCheckBox?.length])
+
+    const getMultiValue2 = React.useCallback((key1,key2,key3) =>{
+        let value = []
+        if(formData?.values?.platforms2){
+            formData?.values?.platforms2?.forEach((item)=>{
+                if(formData?.values[key1].some( (elm) => elm === Object.keys(item)[0])){
+                    value = value.concat(item[Object.keys(item)[0]][0][key2])
+                }
+            })
+            return value.filter(item => item ? true : false).toString();
+        }
+    },[formData, formData.values,formData?.values?.databseCheckBox?.length])
+
 
     return (
         <div>
@@ -497,15 +535,15 @@ const Form = ({
 
                         <Grid container>
                             <Grid xs={12} sm={12} md={6} lg={6} xl={6} sx={{display:'flex', alignItems:'start', flexDirection:'column'}} item>
-                                <span><StyledCheckbox color="success" name='database'/> Meghacache</span>
-                                <span><StyledCheckbox color="success" name='database'/> Elasticsearch</span>
-                                <span><StyledCheckbox color="success" name='database'/> Storm</span>
-                                <span><StyledCheckbox color="success" name='database'/> Storm</span>
+                                <span><StyledCheckbox onChange={(e)=>checkboxHandler(e,undefined,'databseCheckBox')} value='cassandra' color="success" name='database'/> Cassandra</span>
+                                <span><StyledCheckbox onChange={(e)=>checkboxHandler(e,undefined,'databseCheckBox')} value='mongo' color="success" name='database'/> Mongo</span>
+                                <span><StyledCheckbox onChange={(e)=>checkboxHandler(e,undefined,'databseCheckBox')} value='cosmosdb' color="success" name='database'/> Cosmosdb</span>
+                                <span><StyledCheckbox onChange={(e)=>checkboxHandler(e,undefined,'databseCheckBox')} value='yugabyte' color="success" name='database'/> Yugabyte</span>
                             </Grid>
                             <Grid xs={12} sm={12} md={6} lg={6} xl={6} sx={{display:'flex', alignItems:'start', flexDirection:'column'}}  item>
-                                <span><StyledCheckbox color="success" name='database' /> Kafta</span>
-                                <span><StyledCheckbox color="success" name='database' /> Soir</span>
-                                <span><StyledCheckbox color="success" name='database' /> Soir</span>
+                                <span><StyledCheckbox onChange={(e)=>checkboxHandler(e,undefined,'databseCheckBox')} color="success" value='postgresql' name='database' /> Postgresql</span>
+                                <span><StyledCheckbox onChange={(e)=>checkboxHandler(e,undefined,'databseCheckBox')} color="success" value='azuresql' name='database' /> Azuresql</span>
+                                <span><StyledCheckbox onChange={(e)=>checkboxHandler(e,undefined,'databseCheckBox')} color="success" value='oracle' name='database' /> Oracle</span>
                             </Grid>
                         </Grid>
 
@@ -516,9 +554,10 @@ const Form = ({
                             <Grid xs={12} sm={12} md={9} lg={8} xl={8} item>
                                 <StyledTextField fullWidth
                                                  placeholder='ClusterName'
-                                                 name='clusterName'
-                                    // helperText={formData.errors?.clusterName}
-                                                 value={formData.values?.clusterName}
+                                                 name='dbname'
+                                    // helperText={formData.errors?.dbname}
+                                    //              value={formData.values?.dbname}
+                                                 value={getMultiValue('databseCheckBox','dbname','platforms')}
                                                  onChange={formHandler}
                                 />
                             </Grid>
@@ -531,8 +570,8 @@ const Form = ({
                                 <StyledTextField fullWidth
                                                  placeholder='Version'
                                                  name='version'
-                                                 helperText={formData.errors?.version}
-                                                 value={formData.values?.version}
+                                                 // helperText={formData.errors?.version}
+                                                 value={getMultiValue('databseCheckBox','version','platforms')}
                                                  onChange={formHandler}
                                 />
                             </Grid>
@@ -544,9 +583,9 @@ const Form = ({
                             <Grid xs={12} sm={12} md={9} lg={8} xl={8} item>
                                 <StyledTextField fullWidth
                                                  placeholder='Data Centers'
-                                                 name='dataCenters'
-                                                 helperText={formData.errors?.dataCenters}
-                                                 value={formData.values?.dataCenters}
+                                                 name='Datacenter'
+                                                 helperText={formData.errors?.Datacenter}
+                                                 value={getMultiValue('databseCheckBox','Datacenter','platforms')}
                                                  onChange={formHandler}
                                 />
                             </Grid>
@@ -558,9 +597,9 @@ const Form = ({
                             <Grid xs={12} sm={12} md={9} lg={8} xl={8} item>
                                 <StyledTextField fullWidth
                                                  placeholder='Team Contact'
-                                                 name='teamContact'
-                                                 helperText={formData.errors?.teamContact}
-                                                 value={formData.values?.teamContact}
+                                                 name='teamcontact'
+                                                 // helperText={formData.errors?.teamcontact}
+                                                 value={getMultiValue('databseCheckBox','teamcontact','platforms')}
                                                  onChange={formHandler}
                                 />
                             </Grid>
@@ -572,43 +611,43 @@ const Form = ({
                             <Grid xs={12} sm={12} md={9} lg={8} xl={8} item>
                                 <StyledTextField fullWidth
                                                  placeholder='MMSDC View'
-                                                 name='mmsdcView'
-                                                 helperText={formData.errors?.mmsdcView}
-                                                 value={formData.values?.mmsdcView}
+                                                 name='mmslink'
+                                                 helperText={formData.errors?.mmslink}
+                                                 value={getMultiValue('databseCheckBox','mmslink','platforms')}
                                                  onChange={formHandler}
                                 />
                             </Grid>
                         </Grid>
-                        <Grid container className={style.fieldBox}>
-                            <Grid xs={12} sm={12} md={3} lg={4} xl={4} item>
-                                <div className={style.inputLable}>MMS Cluster View</div>
-                            </Grid>
-                            <Grid xs={12} sm={12} md={9} lg={8} xl={8} item>
-                                <StyledTextField fullWidth
-                                                 placeholder='MMS Cluster View'
-                                                 name='mmsClusterView'
-                                                 helperText={formData.errors?.mmsClusterView}
-                                                 value={formData.values?.mmsClusterView}
-                                                 onChange={formHandler}
-                                />
-                            </Grid>
-                        </Grid>
+                        {/*<Grid container className={style.fieldBox}>*/}
+                        {/*    <Grid xs={12} sm={12} md={3} lg={4} xl={4} item>*/}
+                        {/*        <div className={style.inputLable}>MMS Cluster View</div>*/}
+                        {/*    </Grid>*/}
+                        {/*    <Grid xs={12} sm={12} md={9} lg={8} xl={8} item>*/}
+                        {/*        <StyledTextField fullWidth*/}
+                        {/*                         placeholder='MMS Cluster View'*/}
+                        {/*                         name='mmsClusterView'*/}
+                        {/*                         helperText={formData.errors?.mmsClusterView}*/}
+                        {/*                         value={formData.values?.mmsClusterView}*/}
+                        {/*                         onChange={formHandler}*/}
+                        {/*        />*/}
+                        {/*    </Grid>*/}
+                        {/*</Grid>*/}
                         ---------------------------------------------------------------------------------------------------------------
                         <Grid container>
                             <Grid xs={12} sm={12} md={6} lg={6} xl={6} sx={{display:'flex', alignItems:'start', flexDirection:'column'}} item>
-                                <span><StyledCheckbox color="success" name='container'/> Meghacache</span>
-                                <span><StyledCheckbox color="success" name='container'/> Elasticsearch</span>
-                                <span><StyledCheckbox color="success" name='container'/> Storm</span>
+                                <span><StyledCheckbox  onChange={(e)=>checkboxHandler(e,undefined,'databse2CheckBox')} value='meghacache' color="success" name='container'/> Meghacache</span>
+                                <span><StyledCheckbox  onChange={(e)=>checkboxHandler(e,undefined,'databse2CheckBox')} value='elasticsearch' color="success" name='container'/> Elasticsearch</span>
+                                <span><StyledCheckbox  onChange={(e)=>checkboxHandler(e,undefined,'databse2CheckBox')} value='storm' color="success" name='container'/> Storm</span>
                             </Grid>
                             <Grid xs={12} sm={12} md={6} lg={6} xl={6} sx={{display:'flex', alignItems:'start', flexDirection:'column'}}  item>
-                                <span><StyledCheckbox color="success" name='container' /> Kafta</span>
-                                <span><StyledCheckbox color="success" name='container' /> Soir</span>
+                                <span><StyledCheckbox onChange={(e)=>checkboxHandler(e,undefined,'databse2CheckBox')} value='kafta' color="success" name='container' /> Kafta</span>
+                                <span><StyledCheckbox onChange={(e)=>checkboxHandler(e,undefined,'databse2CheckBox')} value='soir' color="success" name='container' /> Soir</span>
                             </Grid>
                         </Grid>
 
-                        <Typography variant="h4" className={style.justifyStart} gutterBottom>
-                            Kafka
-                        </Typography>
+                        {/*<Typography variant="h4" className={style.justifyStart} gutterBottom>*/}
+                        {/*    Kafka*/}
+                        {/*</Typography>*/}
                         <Grid container className={style.fieldBox}>
                             <Grid xs={12} sm={12} md={3} lg={4} xl={4} item>
                                 <div className={style.inputLable}>Cluster</div>
@@ -617,8 +656,8 @@ const Form = ({
                                 <StyledTextField fullWidth
                                                  placeholder='Cluster'
                                                  name='cluster'
-                                                 helperText={formData.errors?.cluster}
-                                                 value={formData.values?.cluster}
+                                                 // helperText={formData.errors?.cluster}
+                                                 value={getMultiValue2('databse2CheckBox','cluster')}
                                                  onChange={formHandler}
                                 />
                             </Grid>
@@ -631,8 +670,8 @@ const Form = ({
                                 <StyledTextField fullWidth
                                                  placeholder='Topic'
                                                  name='topic'
-                                                 helperText={formData.errors?.topic}
-                                                 value={formData.values?.topic}
+                                                 // helperText={formData.errors?.topic}
+                                                 value={getMultiValue2('databse2CheckBox','topic')}
                                                  onChange={formHandler}
                                 />
                             </Grid>
@@ -643,10 +682,10 @@ const Form = ({
                             </Grid>
                             <Grid xs={12} sm={12} md={9} lg={8} xl={8} item>
                                 <StyledTextField fullWidth
-                                                 placeholder='Username'
-                                                 name='userName'
-                                                 helperText={formData.errors?.userName}
-                                                 value={formData.values?.userName}
+                                                 placeholder='Lenc Url'
+                                                 name='lencurl'
+                                                 // helperText={formData.errors?.lencurl}
+                                                 value={getMultiValue2('databse2CheckBox','lencurl')}
                                                  onChange={formHandler}
                                 />
                             </Grid>
