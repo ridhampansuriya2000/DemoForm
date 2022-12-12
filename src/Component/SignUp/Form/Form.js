@@ -49,7 +49,7 @@ const Form = ({
     const formHandler = (e,e2,key, index) => {
         let {name, value} = e.target;
         let  dummy = formData;
-        dummy.values[key][index][name] = value
+        if(index) dummy.values[key][index][name] = value
         setFormData((preState) => ({
             ...preState,
             values: {
