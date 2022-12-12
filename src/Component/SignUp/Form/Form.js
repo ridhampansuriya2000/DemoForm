@@ -34,9 +34,11 @@ const Form = ({
             let data = await getMockData();
             setFormData((preState)=>({
                 ...preState,
-                values : data
+                values : {...data,
+                    formRadio : 'oneops',
+                    databseCheckBox : [],
+                    checkBox : []}
             }))
-            window.d = data.org
         })()
     },[])
 
@@ -44,16 +46,17 @@ const Form = ({
         handleSubmit(formData.values);
     }
 
-    const formHandler = (e,e2,key) => {
-        console.log('event',e,key)
+    const formHandler = (e,e2,key, index) => {
         let {name, value} = e.target;
+        let  dummy = formData;
+        dummy.values[key][index][name] = value
         setFormData((preState) => ({
             ...preState,
             values: {
                 ...preState.values,
-                [key ?? name]: key ? {...preState.values[key], [name] : value } : value
+                [key ?? name]: key ? index !== undefined ? dummy.values[key] : {...preState.values[key], [name] : value } : value
             },
-            errors: !key ? {
+            errors: !key || !index ? {
                 ...preState.errors,
                 [name]: errorHander(name, value)
             } : {...preState.errors},
@@ -83,12 +86,14 @@ const Form = ({
                         <Grid xs={12} sm={12} md={9} lg={8} xl={8} item>
                             <StyledSelectField fullWidth
                                                name='org'
-                                               value={ formData.values.org}
+                                               displayEmpty
+                                               renderValue={ () => formData?.values?.org}
+                                               value={formData?.values?.org}
                                                onChange={formHandler}
                             >
-                                <MenuItem value={'U.S Omni Tech'}>U.S Omni Tech</MenuItem>
-                                <MenuItem value={'Indian Tech'}>Indian Tech</MenuItem>
-                                <MenuItem value={'Hindustan Tech'}>Hindustan Tech</MenuItem>
+                                <MenuItem key={'U.S Omni Tech'} value={'U.S Omni Tech'}>U.S Omni Tech</MenuItem>
+                                <MenuItem key={'Indian Tech'} value={'Indian Tech'}>Indian Tech</MenuItem>
+                                <MenuItem key={'Hindustan Tech'} value={'Hindustan Tech'}>Hindustan Tech</MenuItem>
                             </StyledSelectField>
                         </Grid>
                     </Grid>
@@ -101,6 +106,8 @@ const Form = ({
                         <Grid xs={12} sm={12} md={9} lg={8} xl={8} item>
                             <StyledSelectField fullWidth
                                                name='pillar'
+                                               displayEmpty
+                                               renderValue={ () => formData?.values?.pillar}
                                                value={formData.values?.pillar}
                                                onChange={formHandler}
                             >
@@ -121,6 +128,8 @@ const Form = ({
                                                name='product'
                                                value={formData.values?.product}
                                                onChange={formHandler}
+                                               displayEmpty
+                                               renderValue={ () => formData?.values?.product}
                                 // helperText={formData.errors?.product}
                             >
                                 <MenuItem value={'catalog'}>catalog</MenuItem>
@@ -174,7 +183,7 @@ const Form = ({
                     </RadioGroup>
                     </FormControl>
 
-                    { formData?.values?.formRadio === 'wcnp' ?
+                    { formData.values.formRadio === 'oneops' ?
                         <>
                             <Grid container className={style.fieldBox}>
                                 <Grid xs={12} sm={12} md={3} lg={4} xl={4} item>
@@ -185,8 +194,8 @@ const Form = ({
                                                      placeholder='App Name'
                                                      name='appName'
                                                      // helperText={formData.errors?.appName}
-                                                     value={formData.values?.wcnp?.appName}
-                                                     onChange={formHandler}
+                                                     value={formData.values?.oneops?.appName}
+                                                     onChange={(e)=>formHandler(e,undefined,'oneops')}
                                     />
                                 </Grid>
                             </Grid>
@@ -200,8 +209,8 @@ const Form = ({
                                                      placeholder='assembly'
                                                      name='Assembly'
                                         // helperText={formData.errors?.wcnp?.assembly}
-                                                     value={formData.values?.wcnp?.assembly}
-                                                     onChange={formHandler}
+                                                     value={formData.values?.oneops?.assembly}
+                                                     onChange={(e)=>formHandler(e,undefined,'oneops')}
                                     />
                                 </Grid>
                             </Grid>
@@ -213,10 +222,10 @@ const Form = ({
                                 <Grid xs={12} sm={12} md={9} lg={8} xl={8} item>
                                     <StyledTextField fullWidth
                                                      placeholder='Environment'
-                                                     name='Environment'
+                                                     name='environment'
                                                      // helperText={formData.errors?.wcnp?.environment}
-                                                     value={formData.values?.wcnp?.environment}
-                                                     onChange={formHandler}
+                                                     value={formData.values?.oneops?.environment}
+                                                     onChange={(e)=>formHandler(e,undefined,'oneops')}
                                     />
                                 </Grid>
                             </Grid>
@@ -230,8 +239,8 @@ const Form = ({
                                                      placeholder='Platform'
                                                      name='platform'
                                                      // helperText={formData.errors?.wcnp?.platform}
-                                                     value={formData.values?.wcnp?.platform}
-                                                     onChange={formHandler}
+                                                     value={formData.values?.oneops?.platform}
+                                                     onChange={(e)=>formHandler(e,undefined,'oneops')}
                                     />
                                 </Grid>
                             </Grid>
@@ -245,8 +254,8 @@ const Form = ({
                                                      placeholder='Concord'
                                                      name='concord'
                                         // helperText={formData.errors?.wcnp?.concord}
-                                                     value={formData.values?.wcnp?.concord}
-                                                     onChange={formHandler}
+                                                     value={formData.values?.oneops?.concord}
+                                                     onChange={(e)=>formHandler(e,undefined,'oneops')}
                                     />
                                 </Grid>
                             </Grid>
@@ -260,8 +269,8 @@ const Form = ({
                                                      placeholder='Looper'
                                                      name='looper'
                                         // helperText={formData.errors?.wcnp?.looper}
-                                                     value={formData.values?.wcnp?.looper}
-                                                     onChange={formHandler}
+                                                     value={formData.values?.oneops?.looper}
+                                                     onChange={(e)=>formHandler(e,undefined,'oneops')}
                                     />
                                 </Grid>
                             </Grid>
@@ -278,7 +287,7 @@ const Form = ({
                                                      name='nameSpace'
                                         // helperText={formData.errors?.wcnp?.nameSpace}
                                                      value={formData.values?.wcnp?.nameSpace}
-                                                     onChange={formHandler}
+                                                     onChange={(e)=>formHandler(e,undefined,'wcnp')}
                                     />
                                 </Grid>
                             </Grid>
@@ -293,7 +302,7 @@ const Form = ({
                                                      name='appName'
                                                      // helperText={formData.errors?.wcnp?.appName}
                                                      value={formData.values?.wcnp?.appName}
-                                                     onChange={formHandler}
+                                                     onChange={(e)=>formHandler(e,undefined,'wcnp')}
                                     />
                                 </Grid>
                             </Grid>
@@ -308,7 +317,7 @@ const Form = ({
                                                      name='clusters'
                                                      // helperText={formData.errors?.wcnp?.clusters}
                                                      value={formData.values?.wcnp?.clusters}
-                                                     onChange={formHandler}
+                                                     onChange={(e)=>formHandler(e,undefined,'wcnp')}
                                     />
                                 </Grid>
                             </Grid>
@@ -323,12 +332,37 @@ const Form = ({
                                                      name='kittFile'
                                                      // helperText={formData.errors?.wcnp?.kittFile}
                                                      value={formData.values?.wcnp?.kittFile}
-                                                     onChange={formHandler}
+                                                     onChange={(e)=>formHandler(e,undefined,'wcnp')}
                                     />
                                 </Grid>
                             </Grid>
                         </>
                     }
+
+                    <div className={style.basicData}><p>serviceRegistry  :  &nbsp;</p><span>{formData?.values?.serviceRegistry}</span></div>
+                    <div className={style.basicData}><p>description  :  &nbsp;</p><span>{formData?.values?.description}</span></div>
+                    <div className={style.basicData}><p>tier  :  &nbsp;</p><span>{formData?.values?.tier}</span></div>
+                    <div className={style.basicData}><p>apmID  :  &nbsp;</p><span>{formData?.values?.apmID}</span></div>
+                    <div className={style.basicData}><p>adgroup  :  &nbsp;</p><span>{formData?.values?.adgroup}</span></div>
+                    <div className={style.basicData}><p>servicenow  :  &nbsp;</p><span>{formData?.values?.servicenow}</span></div>
+                    <div className={style.basicData}><p>xMatter  :  &nbsp;</p><span>{formData?.values?.xMatter}</span></div>
+                    <div className={style.basicData}><p>dl  :  &nbsp;</p><span>{formData?.values?.dl}</span></div>
+                    <div className={style.basicData}><p>jira  :  &nbsp;</p><span>{formData?.values?.jira}</span></div>
+                    <div className={style.basicData}><p>poc  :  &nbsp;</p><span>{formData?.values?.poc}</span></div>
+                    <div className={style.basicData}><p>owner  :  &nbsp;</p><span>{formData?.values?.owner}</span></div>
+                    <div className={style.basicData}><p>l3  :  &nbsp;</p><span>{formData?.values?.l3}</span></div>
+                    <div className={style.basicData}><p>l4  :  &nbsp;</p><span>{formData?.values?.l4}</span></div>
+                    <div className={style.basicData}><p>l5  :  &nbsp;</p><span>{formData?.values?.l5}</span></div>
+                    <div className={style.basicData}><p>gitRepo  :  &nbsp;</p><span>{formData?.values?.gitRepo}</span></div>
+                    <div className={style.basicData}><p>checkmarx  :  &nbsp;</p><span>{formData?.values?.checkmarx}</span></div>
+                    <div className={style.basicData}><p>sonarqube  :  &nbsp;</p><span>{formData?.values?.sonarqube}</span></div>
+                    <div className={style.basicData}><p>hyegiea  :  &nbsp;</p><span>{formData?.values?.hyegiea}</span></div>
+                    <div className={style.basicData}><p>splunkURL  :  &nbsp;</p><span>{formData?.values?.splunkURL}</span></div>
+                    <div className={style.basicData}><p>dynatrace  :  &nbsp;</p><span>{formData?.values?.dynatrace}</span></div>
+                    <div className={style.basicData}><p>prometheus  :  &nbsp;</p><span>{formData?.values?.prometheus}</span></div>
+                    <div className={style.basicData}><p>istioGrafana  :  &nbsp;</p><span>{formData?.values?.istioGrafana}</span></div>
+                    <div className={style.basicData}><p>podGrafana  :  &nbsp;</p><span>{formData?.values?.podGrafana}</span></div>
+                    <div className={style.basicData}><p>appGrafana  :  &nbsp;</p><span>{formData?.values?.appGrafana}</span></div>
 
                         <Typography variant="h4" className={style.justifyStart} gutterBottom>
                             CCM
@@ -349,7 +383,7 @@ const Form = ({
                                                 // helperText={formData.errors?.ccm[index]?.url}
                                                 //              value={formData.values?.ccm[index]?.url}
                                                              value={item?.url}
-                                                             onChange={formHandler}
+                                                             onChange={(e)=>formHandler(e,undefined,'ccm',index)}
                                             />
                                         </Grid>
                                     </Grid>
@@ -367,7 +401,7 @@ const Form = ({
                                                 // helperText={formData.errors?.ccm[index]?.url}
                                                 //              value={formData.values?.ccm[index]?.path}
                                                              value={item?.path}
-                                                             onChange={formHandler}
+                                                             onChange={(e)=>formHandler(e,undefined,'ccm',index)}
                                             />
                                         </Grid>
                                     </Grid>
@@ -376,7 +410,17 @@ const Form = ({
                                 <Grid xs={12} sm={12} md={12} lg={12} xl={4} className={`${style.alienCenter} ${style.subFieldBox}`} item>
                                     <Button variant="contained" sx={{
                                         margin:'10px 0px'
-                                    }}>Add New Entery</Button>
+                                    }}
+                                            onClick={()=>{
+                                                setFormData((prevState)=>({
+                                                    ...prevState,
+                                                    values: {
+                                                        ...prevState.values,
+                                                        ccm : prevState.values.ccm?.concat({url : '', path : ''})
+                                                    }
+                                                }))
+                                            }}
+                                    >Add New Entery</Button>
                                 </Grid >}
 
                             </Grid>
@@ -389,7 +433,7 @@ const Form = ({
                         </Typography>
 
                     {
-                        formData?.values?.ccm?.map((secrets,index)=>(
+                        formData?.values?.secrets?.map((secrets,index)=>(
                             <Grid container className={style.fieldBox}>
                                 <Grid xs={12} sm={12} md={12} lg={12} xl={4} className={style.subFieldBox} item>
                                     <Grid container>
@@ -424,12 +468,22 @@ const Form = ({
                                         </Grid>
                                     </Grid>
                                 </Grid >
-                                {formData?.values?.ccm?.length - 1 === index &&
+                                {formData?.values?.secrets?.length - 1 === index &&
                                 <Grid xs={12} sm={12} md={12} lg={12} xl={4}
                                       className={`${style.alienCenter} ${style.subFieldBox}`} item>
                                     <Button variant="contained" sx={{
                                         margin: '10px 0px'
-                                    }}>Add New Entery</Button>
+                                    }}
+                                            onClick={()=>{
+                                                setFormData((prevState)=>({
+                                                    ...prevState,
+                                                    values: {
+                                                        ...prevState.values,
+                                                        secrets : prevState.values.secrets?.concat({url : '', path : ''})
+                                                    }
+                                                }))
+                                            }}
+                                    >Add New Entery</Button>
                                 </Grid>
                                 }
 
@@ -611,7 +665,6 @@ const Form = ({
                         </Button>
                         </Grid>
                         </Grid>
-                    }
 
         </div>
     )
